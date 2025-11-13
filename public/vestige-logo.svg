@@ -1,0 +1,12 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#1e40af" opacity="0.1"/>
+  
+  <!-- Main checkmark shape -->
+  <g transform="translate(100, 100)">
+    <!-- Stylized V for Vestige -->
+    <path d="M -30 -20 L -5 25 L 30 -20" stroke="#1e40af" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Checkmark accent -->
+    <path d="M -15 10 L 5 25 L 25 5" stroke="#10b981" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
