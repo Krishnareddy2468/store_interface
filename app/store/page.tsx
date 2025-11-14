@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouter } from 'next/navigation'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Bell, Settings, LogOut, Package, TrendingUp, DollarSign, Users, AlertCircle } from "lucide-react"
+import { Bell, Settings, LogOut, Package, TrendingUp, DollarSign, Users, AlertCircle } from 'lucide-react'
 import StoreDashboard from "@/components/store/store-dashboard"
 import CardDeliveries from "@/components/store/card-deliveries"
 import CommissionTracker from "@/components/store/commission-tracker"
@@ -12,16 +13,54 @@ import MyPayouts from "@/components/store/my-payouts"
 import BatchManagement from "@/components/store/batch-management"
 import Notifications from "@/components/store/notifications"
 
-const defaultStoreInfo = {
-  name: "BHAINSA_STORE",
-  city: "Bhainsa",
-  storeHead: "K.GOUTHAM",
-  mobile: "9494941146",
+interface StoreInfo {
+  storeId: string
+  name: string
+  head: string
+  city: string
+  mobile: string
 }
 
 export default function StorePage() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState("dashboard")
-  const [storeInfo] = useState(defaultStoreInfo)
+  const [storeInfo, setStoreInfo] = useState<StoreInfo | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const authData = localStorage.getItem("vestige_auth")
+    if (!authData) {
+      router.push("/login")
+      return
+    }
+    
+    try {
+      const parsedAuth = JSON.parse(authData)
+      setStoreInfo(parsedAuth)
+    } catch (err) {
+      router.push("/login")
+    } finally {
+      setIsLoading(false)
+    }
+  }, [router])
+
+  const handleLogout = () => {
+    localStorage.removeItem("vestige_auth")
+    localStorage.removeItem("vestige_token")
+    router.push("/")
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 flex items-center justify-center">
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    )
+  }
+
+  if (!storeInfo) {
+    return null
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
@@ -73,7 +112,11 @@ export default function StorePage() {
               <Settings className="w-5 h-5 text-gray-600" />
             </Button>
             <div className="w-px h-6 bg-gray-200" />
-            <Button variant="ghost" className="text-gray-600 hover:text-red-600 hover:bg-red-50 font-medium">
+            <Button
+              variant="ghost"
+              className="text-gray-600 hover:text-red-600 hover:bg-red-50 font-medium"
+              onClick={handleLogout}
+            >
               <LogOut className="w-4 h-4 mr-2" />
               Logout
             </Button>
@@ -92,7 +135,7 @@ export default function StorePage() {
                 <div className="flex items-center gap-6 text-blue-100 text-sm">
                   <span className="flex items-center gap-2">
                     <Users className="w-4 h-4" />
-                    Store Head: {storeInfo.storeHead}
+                    Store Head: {storeInfo.head}
                   </span>
                   <span>•</span>
                   <span className="flex items-center gap-2">
