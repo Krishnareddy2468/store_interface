@@ -111,6 +111,9 @@ export default function StorePage() {
             <Button variant="ghost" size="icon" className="hover:bg-blue-50">
               <Settings className="w-5 h-5 text-gray-600" />
             </Button>
+            <a href="/admin" className="text-sm text-gray-600 hover:text-blue-600 font-medium px-3 py-2 rounded hover:bg-blue-50 transition">
+              Admin
+            </a>
             <div className="w-px h-6 bg-gray-200" />
             <Button
               variant="ghost"
@@ -147,6 +150,12 @@ export default function StorePage() {
                 </div>
               </div>
               <div className="flex gap-3">
+                <Button
+                  onClick={() => router.push("/store/apply-id-card")}
+                  className="bg-white text-blue-600 hover:bg-blue-50 font-semibold shadow-md"
+                >
+                  + Apply New ID Card
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"
